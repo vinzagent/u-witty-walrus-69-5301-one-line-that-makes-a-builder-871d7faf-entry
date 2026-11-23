@@ -30,6 +30,12 @@ const PUNCHLINE = "winner takes the reward.";
 
 const LINE = `${SETUP} ${PUNCHLINE}`;
 
+// Local gate: the entry must be exactly one non-blank line of 1-240 chars.
+// Fails loudly (non-zero exit, no file written) instead of shipping a bad line.
+if (LINE.length < 1 || LINE.length > 240 || LINE.trim().length === 0 || LINE.includes("\n")) {
+  throw new Error(`Invalid entry line: must be one non-blank line of 1-240 chars, got ${LINE.length} chars.`);
+}
+
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
 writeFileSync(join(outDir, "entry.txt"), LINE + "\n", "utf8");
